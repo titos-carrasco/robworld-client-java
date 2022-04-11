@@ -1,3 +1,5 @@
+package test;
+
 import rcr.robworld.RobotThymio2;
 import rcr.robworld.RobotEPuck;
 
@@ -38,52 +40,50 @@ public class TestSensorsObject {
         // Usamos try/catch para conocer los errores que se produzcan
         try {
             // Accesamos el robots
-            MyThymio2 thymio = new MyThymio2( "Thymio-01", host, port );
-            MyEPuck epuck = new MyEPuck( "Epuck-01", host, port );
+            MyThymio2 thymio = new MyThymio2("Thymio-01", host, port);
+            MyEPuck epuck = new MyEPuck("Epuck-01", host, port);
 
             // Loop clasico
             long t = System.currentTimeMillis() / 1000;
-            while( System.currentTimeMillis() / 1000 - t < 20 ) {
+            while (System.currentTimeMillis() / 1000 - t < 20) {
                 double distanciaThymio = thymio.checkObstacle();
                 double distanciaEpuck = epuck.checkObstacle();
 
                 // mostramos el valor de los sensores utilizados
-                System.out.printf( "thymio: %10.5f - epuck: %10.5f \n", distanciaThymio, distanciaEpuck );
+                System.out.printf("thymio: %10.5f - epuck: %10.5f \n", distanciaThymio, distanciaEpuck);
 
-                Thread.sleep( 1000 );
+                Thread.sleep(1000);
             }
 
-            thymio.setSpeed( 0, 0 );
-            epuck.setSpeed( 0, 0 );
+            thymio.setSpeed(0, 0);
+            epuck.setSpeed(0, 0);
             thymio.close();
             epuck.close();
-        }
-        catch( Exception e ) {
-            System.out.println( e );
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
-    public static void main( String[] args ) {
+    public static void main(String[] args) {
         TestSensorsObject test = new TestSensorsObject();
         test.run();
     }
 
-
     class MyThymio2 extends RobotThymio2 {
         private int s = 10;
 
-        public MyThymio2( String name, String host, int port ) throws Exception {
-            super( name, host, port );
-            setSpeed( s, s );
+        public MyThymio2(String name, String host, int port) throws Exception {
+            super(name, host, port);
+            setSpeed(s, s);
         }
 
         public double checkObstacle() throws Exception {
             getSensors();
             double distancia = getProximitySensorDistances()[2];
-            if( distancia < 8 )
-                setSpeed( -s*10, s );
+            if (distancia < 8)
+                setSpeed(-s * 10, s);
             else
-                setSpeed( s, s );
+                setSpeed(s, s);
             return distancia;
         }
 
@@ -92,18 +92,18 @@ public class TestSensorsObject {
     class MyEPuck extends RobotEPuck {
         private int s = 20;
 
-        public MyEPuck( String name, String host, int port ) throws Exception {
-            super( name, host, port );
-            setSpeed( s, s );
+        public MyEPuck(String name, String host, int port) throws Exception {
+            super(name, host, port);
+            setSpeed(s, s);
         }
 
         public double checkObstacle() throws Exception {
             getSensors();
             double distancia = getProximitySensorDistances()[0];
-            if( distancia < 8 )
-                setSpeed( -s*10, s );
+            if (distancia < 8)
+                setSpeed(-s * 10, s);
             else
-                setSpeed( s, s );
+                setSpeed(s, s);
             return distancia;
         }
 

@@ -1,3 +1,5 @@
+package test;
+
 import java.lang.Thread;
 
 import rcr.robworld.RobotThymio2;
@@ -40,31 +42,30 @@ public class TestSensorsThread {
         // Usamos try/catch para conocer los errores que se produzcan
         try {
             // Accesamos el robots
-            MyThymio2 thymio = new MyThymio2( "Thymio-01", host, port );
-            MyEPuck epuck = new MyEPuck( "Epuck-01", host, port );
+            MyThymio2 thymio = new MyThymio2("Thymio-01", host, port);
+            MyEPuck epuck = new MyEPuck("Epuck-01", host, port);
 
             // los levantamoso en hilos separados
-            Thread tThymio = new Thread( thymio, "Thymio-01" );
-            Thread tEpuck = new Thread( epuck,"Epuck-01" );
+            Thread tThymio = new Thread(thymio, "Thymio-01");
+            Thread tEpuck = new Thread(epuck, "Epuck-01");
 
             tThymio.start();
             tEpuck.start();
 
             // Loop clasico
             long t = System.currentTimeMillis() / 1000;
-            while( System.currentTimeMillis() / 1000 - t < 20 ) {
-                Thread.sleep( 1000 );
+            while (System.currentTimeMillis() / 1000 - t < 20) {
+                Thread.sleep(1000);
             }
 
             thymio.finish();
             epuck.finish();
-        }
-        catch( Exception e ) {
-            System.out.println( e );
+        } catch (Exception e) {
+            System.out.println(e);
         }
     }
 
-    public static void main( String[] args ) {
+    public static void main(String[] args) {
         TestSensorsThread test = new TestSensorsThread();
         test.run();
     }
@@ -75,83 +76,92 @@ public class TestSensorsThread {
         private boolean quit = false;
         private Object sync = new Object();
 
-        public MyThymio2( String name, String host, int port ) throws Exception {
-            super( name, host, port );
+        public MyThymio2(String name, String host, int port) throws Exception {
+            super(name, host, port);
         }
 
         public void run() {
             me = Thread.currentThread();
             try {
-                setSpeed( s, s );
-                while( true ) {
+                setSpeed(s, s);
+                while (true) {
                     getSensors();
                     double distancia = getProximitySensorDistances()[2];
-                    if( distancia < 3 ) {
-                        setSpeed( -s*10, s );
-                        Thread.sleep( 1000 );
-                        setSpeed( s, s );
+                    if (distancia < 3) {
+                        setSpeed(-s * 10, s);
+                        Thread.sleep(1000);
+                        setSpeed(s, s);
                     }
                     boolean abort;
-                    synchronized( sync ) { abort = quit; }
-                    if( abort ) break;
+                    synchronized (sync) {
+                        abort = quit;
+                    }
+                    if (abort)
+                        break;
                 }
+            } catch (Exception e) {
             }
-            catch( Exception e ){}
 
             try {
-                setSpeed( 0, 0 );
+                setSpeed(0, 0);
                 close();
+            } catch (Exception e) {
             }
-            catch( Exception e ){}
         }
 
         public void finish() throws Exception {
-            synchronized( sync ) { quit = true; }
+            synchronized (sync) {
+                quit = true;
+            }
             me.join();
         }
 
     }
 
-
-    class MyEPuck extends RobotEPuck implements Runnable{
+    class MyEPuck extends RobotEPuck implements Runnable {
         private int s = 10;
         private Thread me = null;
         private boolean quit = false;
         private Object sync = new Object();
 
-        public MyEPuck( String name, String host, int port ) throws Exception {
-            super( name, host, port );
+        public MyEPuck(String name, String host, int port) throws Exception {
+            super(name, host, port);
         }
 
         public void run() {
             me = Thread.currentThread();
             try {
-                setSpeed( s, s );
-                while( true ) {
+                setSpeed(s, s);
+                while (true) {
                     getSensors();
                     double distanciaR = getProximitySensorDistances()[0];
                     double distanciaL = getProximitySensorDistances()[7];
-                    if( distanciaL < 4 || distanciaR < 4 ) {
-                        setSpeed( -s*10, s );
-                        Thread.sleep( 1000 );
-                        setSpeed( s, s );
+                    if (distanciaL < 4 || distanciaR < 4) {
+                        setSpeed(-s * 10, s);
+                        Thread.sleep(1000);
+                        setSpeed(s, s);
                     }
                     boolean abort;
-                    synchronized( sync ) { abort = quit; }
-                    if( abort ) break;
+                    synchronized (sync) {
+                        abort = quit;
+                    }
+                    if (abort)
+                        break;
                 }
+            } catch (Exception e) {
             }
-            catch( Exception e ){}
 
             try {
-                setSpeed( 0, 0 );
+                setSpeed(0, 0);
                 close();
+            } catch (Exception e) {
             }
-            catch( Exception e ){}
         }
 
         public void finish() throws Exception {
-            synchronized( sync ) { quit = true; }
+            synchronized (sync) {
+                quit = true;
+            }
             me.join();
         }
 

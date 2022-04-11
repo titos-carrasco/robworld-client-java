@@ -1,3 +1,5 @@
+package test;
+
 import rcr.robworld.RobotThymio2;
 
 import java.util.Random;
@@ -15,28 +17,27 @@ public class TestEnjambre {
         try {
             // Accesamos el robot y configuramos algunos de sus atributos
             RobotThymio2[] robots = new RobotThymio2[36];
-            for(int i=0; i<36; i++ )
-                robots[i] = new RobotThymio2( "Thymio-" + ( 44444 + i ), host, port );
+            for (int i = 0; i < 36; i++)
+                robots[i] = new RobotThymio2("Thymio-" + (44444 + i), host, port);
 
             // Loop clasico
             long t = System.currentTimeMillis() / 1000;
-            while( System.currentTimeMillis() / 1000 - t < 20 ) {
-                for(int i=0; i<36; i++ )
-                    robots[i].setSpeed( random.nextInt(2000)-1000, random.nextInt(2000)-1000 );
-                Thread.sleep( 2000 );
+            while (System.currentTimeMillis() / 1000 - t < 20) {
+                for (int i = 0; i < 36; i++)
+                    robots[i].setSpeed(random.nextInt(2000) - 1000, random.nextInt(2000) - 1000);
+                Thread.sleep(2000);
             }
 
-            for(int i= 0; i<36; i++ ) {
-                robots[i].setSpeed( 0, 0 );
+            for (int i = 0; i < 36; i++) {
+                robots[i].setSpeed(0, 0);
                 robots[i].close();
             }
-        }
-        catch( Exception e ) {
-            System.out.println( e );
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
-    public static void main( String[] args ) {
+    public static void main(String[] args) {
         TestEnjambre test = new TestEnjambre();
         test.run();
     }

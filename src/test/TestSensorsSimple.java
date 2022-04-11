@@ -1,3 +1,5 @@
+package test;
+
 import rcr.robworld.RobotThymio2;
 import rcr.robworld.RobotEPuck;
 
@@ -38,48 +40,47 @@ public class TestSensorsSimple {
         // Usamos try/catch para conocer los errores que se produzcan
         try {
             // Accesamos el robot y configuramos algunos de sus atributos
-            RobotThymio2 thymio = new RobotThymio2( "Thymio-01", host, port );
-            RobotEPuck epuck = new RobotEPuck( "Epuck-01", host, port );
+            RobotThymio2 thymio = new RobotThymio2("Thymio-01", host, port);
+            RobotEPuck epuck = new RobotEPuck("Epuck-01", host, port);
 
-            thymio.setSpeed( 10, 10 );
-            epuck.setSpeed( 10, 10 );
+            thymio.setSpeed(10, 10);
+            epuck.setSpeed(10, 10);
 
             // Loop clasico
             long t = System.currentTimeMillis() / 1000;
-            while( System.currentTimeMillis() / 1000 - t < 20 ) {
+            while (System.currentTimeMillis() / 1000 - t < 20) {
                 thymio.getSensors();
                 epuck.getSensors();
 
                 double distanciaThymio = thymio.getProximitySensorDistances()[2];
                 double distanciaEpuck = epuck.getProximitySensorDistances()[0];
 
-                if( distanciaThymio < 8 )
-                    thymio.setSpeed( -120, 10 );
+                if (distanciaThymio < 8)
+                    thymio.setSpeed(-120, 10);
                 else
-                    thymio.setSpeed( 10, 10 );
+                    thymio.setSpeed(10, 10);
 
-                if( distanciaEpuck < 8 )
-                    epuck.setSpeed( -10, 10 );
+                if (distanciaEpuck < 8)
+                    epuck.setSpeed(-10, 10);
                 else
-                    epuck.setSpeed( 10, 10 );
+                    epuck.setSpeed(10, 10);
 
                 // mostramos el valor de los sensores utilizados
-                System.out.printf( "thymio: %10.5f - epuck: %10.5f \n", distanciaThymio, distanciaEpuck );
+                System.out.printf("thymio: %10.5f - epuck: %10.5f \n", distanciaThymio, distanciaEpuck);
 
-                Thread.sleep( 1000 );
+                Thread.sleep(1000);
             }
 
-            thymio.setSpeed( 0, 0 );
-            epuck.setSpeed( 0, 0 );
+            thymio.setSpeed(0, 0);
+            epuck.setSpeed(0, 0);
             thymio.close();
             epuck.close();
-        }
-        catch( Exception e ) {
-            System.out.println( e );
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
-    public static void main( String[] args ) {
+    public static void main(String[] args) {
         TestSensorsSimple test = new TestSensorsSimple();
         test.run();
     }
